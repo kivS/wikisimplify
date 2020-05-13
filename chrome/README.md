@@ -1,0 +1,1 @@
+# Wiki-Simplify chrome extension

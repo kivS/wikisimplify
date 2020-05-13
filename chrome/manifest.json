@@ -1,0 +1,13 @@
+{	
+	"manifest_version": 2,
+
+	"name": "WikiSimplify",
+	"version": "1.0",
+	"description": "testing",
+
+	"browser_action": {
+		"default_title": "WikiSimplify",
+		"default_popup": "popup.html"
+	}
+
+}
