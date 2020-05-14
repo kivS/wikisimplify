@@ -3,6 +3,7 @@
 **/
 
 
+// Register pageAction activate only when user visits wikipedia.org site
 chrome.runtime.onInstalled.addListener(function(details) {
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
     chrome.declarativeContent.onPageChanged.addRules([
@@ -19,7 +20,15 @@ chrome.runtime.onInstalled.addListener(function(details) {
 });
 
 
-function simplify_wikipedia_url(url){
+/**
+# Helper function to add the `simple` keyword into the 
+# wikipedia url.
+# 
+# Example:
+#  input  -> https://en.wikipedia.org/wiki/Kinetic_energy
+#  output -> https://simple.wikipedia.org/wiki/Kinetic_energy
+**/
+function simplify_wikipedia(url){
 
 	const WORDS_ALLOWED_IN_HOSTNAME = ["wikipedia", "org"]
 
@@ -42,12 +51,14 @@ function simplify_wikipedia_url(url){
 chrome.pageAction.onClicked.addListener( tab => {
 	console.log('page_action clicked..', tab)
 
+	// parse the url string into an URL object to have access to all the sweet metadata
 	wikipedia_url = new URL(tab.url)
 	console.log(wikipedia_url)
 
-	const simplified_url = simplify_wikipedia_url(wikipedia_url)
+	const simplified_url = simplify_wikipedia(wikipedia_url)
 	console.log(simplified_url)
 	
+	// reload the tab with the new url
 	chrome.tabs.update(tab.id, {url: simplified_url})
 	
 	
