@@ -5,9 +5,22 @@
 	"version": "1.0",
 	"description": "testing",
 
-	"browser_action": {
+	"permissions": [
+      "activeTab",
+      "declarativeContent"
+    ],
+
+	"background": {
+	  "scripts": ["background.js"],
+	  "persistent": false
+	},
+
+	"page_action": {
 		"default_title": "WikiSimplify",
-		"default_popup": "popup.html"
+		"default_icon": {
+		     "19": "icon-19.png",
+		     "38": "icon-38.png"
+		}
 	}
 
 }
