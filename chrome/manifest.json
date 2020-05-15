@@ -3,7 +3,7 @@
 
 	"name": "WikiSimplify",
 	"version": "1.0",
-	"description": "A simple browser extension to activate the simplified wikipedia of an article.",
+	"description": "A simple browser extension to activate the simplified version of an wikipedia article.",
 
 	"permissions": [
       "activeTab",
