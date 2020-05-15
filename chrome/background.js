@@ -47,7 +47,6 @@ function simplify_wikipedia(url){
 	parsed_url_object.hostname = filtered_hostname_string
 
 	return parsed_url_object.href
-
 }
 
 
@@ -60,8 +59,6 @@ chrome.pageAction.onClicked.addListener( tab => {
 	
 	// reload the tab with the new url
 	chrome.tabs.update(tab.id, {url: simplified_url})
-	
-	
 });
 
 /**
@@ -91,16 +88,3 @@ function test_simplify_wikipedia(){
 		console.assert(usecase.expected_output == output, {test_usecase:usecase, output: output})
 	})
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
