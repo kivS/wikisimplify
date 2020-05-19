@@ -24,10 +24,16 @@ chrome.runtime.onInstalled.addListener(function(details) {
 /**
 # Helper function to add the `simple` keyword into the 
 # wikipedia url.
+# If the article has already been simplified(have `simple` in url) then triggering the extension 
+# again will cause it to reverse the change and return the previous link
 # 
 # Example:
 #  input(String)  -> https://en.wikipedia.org/wiki/Kinetic_energy
 #  output(String) -> https://simple.wikipedia.org/wiki/Kinetic_energy
+#
+# Reverse:
+#  input(String) -> https://simple.wikipedia.org/wiki/Kinetic_energy
+#  output(String)  -> https://en.wikipedia.org/wiki/Kinetic_energy
 **/
 function simplify_wikipedia(url){
 
@@ -93,8 +99,13 @@ function test_simplify_wikipedia(){
 		},
 		{ 
 			'input': 'https://simple.wikipedia.org/wiki/Albert_Einstein', 
-			'expected_output': 'https://simple.wikipedia.org/wiki/Albert_Einstein'
-		}
+			'expected_output': 'https://en.wikipedia.org/wiki/Albert_Einstein'
+		},
+		{ 
+			'expected_output': 'https://en.wikipedia.org/wiki/Kinetic_energy', 
+			'input': 'https://simple.wikipedia.org/wiki/Kinetic_energy'
+		},
+		
 	]
 
 	usecase_list.map(usecase => {
