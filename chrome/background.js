@@ -4,7 +4,7 @@
 **/
 
 
-// Register pageAction activate only when user visits wikipedia.org site
+// Register pageAction: activate only when user visits wikipedia.org site
 chrome.runtime.onInstalled.addListener(function(details) {
   chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
     chrome.declarativeContent.onPageChanged.addRules([
@@ -22,9 +22,8 @@ chrome.runtime.onInstalled.addListener(function(details) {
 
 
 /**
-# Helper function to add the `simple` keyword into the 
-# wikipedia url.
-# If the article has already been simplified(have `simple` in url) then triggering the extension 
+# Helper function to add the `simple` keyword in the wikipedia url.
+# If the article already is the simplified version(have `simple` in url) then, triggering the extension 
 # again will cause it to reverse the change and return the previous link
 # 
 # Example:
@@ -46,7 +45,7 @@ function simplify_wikipedia(url){
 
 	let filtered_splitted_hostname = []
 
-	// if the first item on the link hostname is the `simple` keyword then we want to toggle the simplication and replace it with `en` for English
+	// if the first item in the hostname is the `simple` keyword, then we want to toggle the simplification and replace it with `en` for English
 	if(splitted_hostname[0] == 'simple'){
 		console.log('Article is already in the simple version. let\'s toggle it back to normal')
 		splitted_hostname[0] = 'en'
@@ -109,9 +108,14 @@ function test_simplify_wikipedia(){
 	]
 
 	usecase_list.map(usecase => {
-		console.log(`testing usecase for url: ${usecase.input}`)
+		console.dir(usecase)
 		output = simplify_wikipedia(usecase.input)
 		// assertion and returns a context object in case of assertion error
-		console.assert(usecase.expected_output == output, {test_usecase:usecase, output: output})
+		if(usecase.expected_output != output){
+			throw new Error(`❌ Output:${output} != expected:${usecase.expected_output}`)
+		}else{
+			console.log('✅')
+		}
+
 	})
 }
