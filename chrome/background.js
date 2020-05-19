@@ -35,12 +35,28 @@ function simplify_wikipedia(url){
 
 	let parsed_url_object = new URL(url)
 
-	// split the url hostname into an array and create a new array without the words that are not in the `WORDS_ALLOWED_IN_HOSTNAME` list
+	// split the url hostname into an array 
 	const splitted_hostname = parsed_url_object.hostname.split('.')
-	let filtered_splitted_hostname = splitted_hostname.filter(splitted_words => WORDS_ALLOWED_IN_HOSTNAME.some(allowed_word => splitted_words.includes(allowed_word)))
+
+	let filtered_splitted_hostname = []
+
+	// if the first item on the link hostname is the `simple` keyword then we want to toggle the simplication and replace it with `en` for English
+	if(splitted_hostname[0] == 'simple'){
+		console.log('Text is already the simple version. let\'s toggle it back to normal')
+		splitted_hostname[0] = 'en'
+		filtered_splitted_hostname = splitted_hostname
+
+
+	}else{
+
+		// Create a new array without the words that are not in the `WORDS_ALLOWED_IN_HOSTNAME` list
+		filtered_splitted_hostname = splitted_hostname.filter(splitted_words => WORDS_ALLOWED_IN_HOSTNAME.some(allowed_word => splitted_words.includes(allowed_word)))
 	
-	// add `simple` word into the splitted hostname as the first item
-	filtered_splitted_hostname = ["simple", ...filtered_splitted_hostname]
+		// add `simple` word into the splitted hostname as the first item
+		filtered_splitted_hostname = ["simple", ...filtered_splitted_hostname]
+
+	}
+
 
 	// replace old hostname from url object with the filtered one
 	const filtered_hostname_string = filtered_splitted_hostname.join('.')
