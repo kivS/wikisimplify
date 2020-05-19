@@ -48,7 +48,7 @@ function simplify_wikipedia(url){
 
 	// if the first item on the link hostname is the `simple` keyword then we want to toggle the simplication and replace it with `en` for English
 	if(splitted_hostname[0] == 'simple'){
-		console.log('Text is already the simple version. let\'s toggle it back to normal')
+		console.log('Article is already in the simple version. let\'s toggle it back to normal')
 		splitted_hostname[0] = 'en'
 		filtered_splitted_hostname = splitted_hostname
 
