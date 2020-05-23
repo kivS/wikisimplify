@@ -1,6 +1,8 @@
 # Wiki Simplify Browser Extension
 
-A simple browser extension to activate the simplified wikipedia of an article.
+A Browser extension to show the simplified version of a wikipedia article.
+
+![example output](example_output.png)
 
 
 When accessing a wikipedia article like: https://en.wikipedia.org/wiki/Kinetic_energy, we can get a simplified version of it
