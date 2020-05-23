@@ -1,23 +1,24 @@
 /**
-* Extension main event handler.
-*
-**/
+ * Extension main event handler.
+ *
+ **/
 
 
 // Register pageAction: activate only when user visits wikipedia.org site
 chrome.runtime.onInstalled.addListener(function(details) {
-  chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
-    chrome.declarativeContent.onPageChanged.addRules([
-	    {
+	chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
+		chrome.declarativeContent.onPageChanged.addRules([{
 			conditions: [
 				new chrome.declarativeContent.PageStateMatcher({
-					pageUrl: { hostContains: 'wikipedia.org', schemes: ['https'] },
+					pageUrl: {
+						hostContains: 'wikipedia.org',
+						schemes: ['https']
+					},
 				})
-	    	],
-			actions: [ new chrome.declarativeContent.ShowPageAction() ]
-	    },
-    ]);
-  });
+			],
+			actions: [new chrome.declarativeContent.ShowPageAction()]
+		}, ]);
+	});
 });
 
 
@@ -34,7 +35,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
 #  input(String) -> https://simple.wikipedia.org/wiki/Kinetic_energy
 #  output(String)  -> https://en.wikipedia.org/wiki/Kinetic_energy
 **/
-function simplify_wikipedia(url){
+function simplify_wikipedia(url) {
 
 	const WORDS_ALLOWED_IN_HOSTNAME = ["wikipedia", "org"]
 
@@ -46,17 +47,17 @@ function simplify_wikipedia(url){
 	let filtered_splitted_hostname = []
 
 	// if the first item in the hostname is the `simple` keyword, then we want to toggle the simplification and replace it with `en` for English
-	if(splitted_hostname[0] == 'simple'){
+	if (splitted_hostname[0] == 'simple') {
 		console.log('Article is already in the simple version. let\'s toggle it back to normal')
 		splitted_hostname[0] = 'en'
 		filtered_splitted_hostname = splitted_hostname
 
 
-	}else{
+	} else {
 
 		// Create a new array without the words that are not in the `WORDS_ALLOWED_IN_HOSTNAME` list
 		filtered_splitted_hostname = splitted_hostname.filter(splitted_words => WORDS_ALLOWED_IN_HOSTNAME.some(allowed_word => splitted_words.includes(allowed_word)))
-	
+
 		// add `simple` word into the splitted hostname as the first item
 		filtered_splitted_hostname = ["simple", ...filtered_splitted_hostname]
 
@@ -71,49 +72,47 @@ function simplify_wikipedia(url){
 }
 
 
-chrome.pageAction.onClicked.addListener( tab => {
+chrome.pageAction.onClicked.addListener(tab => {
 	console.log('page_action clicked..', tab)
 
 	console.log(`Url to be simplified: ${tab.url}`)
 	const simplified_url = simplify_wikipedia(tab.url)
 	console.log(`simplified url: ${simplified_url}`)
-	
+
 	// reload the tab with the new url
-	chrome.tabs.update(tab.id, {url: simplified_url})
+	chrome.tabs.update(tab.id, {
+		url: simplified_url
+	})
 });
 
 /**
-* A simple helper function to test the wikipedia url simplify function.
-* It goes over each test usecase and throws an assertion error if any usecase fails, alongside some metadata to ID the culprit.
-**/
-function test_simplify_wikipedia(){
-	const usecase_list = [
-		{ 
-			'input': 'https://en.wikipedia.org/wiki/Kinetic_energy', 
+ * A simple helper function to test the wikipedia url simplify function.
+ * It goes over each test usecase and throws an assertion error if any usecase fails, alongside some metadata to ID the culprit.
+ **/
+function test_simplify_wikipedia() {
+	const usecase_list = [{
+			'input': 'https://en.wikipedia.org/wiki/Kinetic_energy',
 			'expected_output': 'https://simple.wikipedia.org/wiki/Kinetic_energy'
-		},
-		{ 
-			'input': 'https://en.wikipedia.org/wiki/Albert_Einstein', 
+		}, {
+			'input': 'https://en.wikipedia.org/wiki/Albert_Einstein',
 			'expected_output': 'https://simple.wikipedia.org/wiki/Albert_Einstein'
-		},
-		{ 
-			'input': 'https://simple.wikipedia.org/wiki/Albert_Einstein', 
+		}, {
+			'input': 'https://simple.wikipedia.org/wiki/Albert_Einstein',
 			'expected_output': 'https://en.wikipedia.org/wiki/Albert_Einstein'
-		},
-		{ 
-			'expected_output': 'https://en.wikipedia.org/wiki/Kinetic_energy', 
+		}, {
+			'expected_output': 'https://en.wikipedia.org/wiki/Kinetic_energy',
 			'input': 'https://simple.wikipedia.org/wiki/Kinetic_energy'
 		},
-		
+
 	]
 
 	usecase_list.map(usecase => {
 		console.dir(usecase)
 		output = simplify_wikipedia(usecase.input)
 		// assertion and returns a context object in case of assertion error
-		if(usecase.expected_output != output){
+		if (usecase.expected_output != output) {
 			throw new Error(`❌ Output:${output} != expected:${usecase.expected_output}`)
-		}else{
+		} else {
 			console.log('✅')
 		}
 
